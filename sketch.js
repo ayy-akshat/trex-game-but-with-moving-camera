@@ -5,7 +5,7 @@ var colGround;
 var trex, trex_running, trexStop;
 var edges;
 var groundImage;
-var obstacle, obstImg1, obstImg2, obstImg3, obstImg4, obstImg5, obstImg6;
+var obstacle, obstImgs;
 var gameOver, gameOverImg;
 var restart, restartImg;
 
@@ -23,12 +23,15 @@ function preload() {
   trexStop = loadAnimation("trex_collided.png");
   groundImage = loadImage("ground2.png");
   cloudImg = loadImage("cloud.png");
-  obstImg1 = loadImage("obstacle1.png")
-  obstImg2 = loadImage("obstacle2.png");
-  obstImg3 = loadImage("obstacle3.png");
-  obstImg4 = loadImage("obstacle4.png");
-  obstImg5 = loadImage("obstacle5.png");
-  obstImg6 = loadImage("obstacle6.png");
+  obstImgs = 
+  [
+    loadImage('obstacle1.png'),
+    loadImage('obstacle2.png'),
+    loadImage('obstacle3.png'),
+    loadImage('obstacle4.png'),
+    loadImage('obstacle5.png'),
+    loadImage('obstacle6.png')
+  ];
   gameOverImg = loadImage("gameOver.png");
   restartImg = loadImage("restart.png");
 }
@@ -102,10 +105,10 @@ function draw() {
   restart.position.x = camera.position.x;
   
   if (gameState == PLAY){
-    trex.velocityX = -(-4 - score/100);
-    if (trex.velocityX > 20)
+    trex.velocityX = 12 + score/100;
+    if (trex.velocityX > 30)
     {
-      trex.velocityX = 20;
+      trex.velocityX = 30;
     }
     colGround.x = trex.x;
     colGround.velocityX = trex.velocityX;
@@ -120,7 +123,7 @@ function draw() {
       console.log('yes');
     }
     
-    if ((keyDown("space") || keyDown('up')) && trex.y > 150) {
+    if ((keyDown("space") || keyDown('up') || mouseIsPressed) && trex.y > 150) {
       trex.velocityY = -10;
     }
     
@@ -173,27 +176,8 @@ function draw() {
 function SpawnObstacle() {
   if (frameCount % 60 === 0) {
     obstacle = createSprite(camera.position.x + 400, 163, 10, 40);
-    var rand = Math.round(random(1, 6));
-    switch (rand) {
-      case 1:
-        obstacle.addImage("1", obstImg1);
-        break;
-      case 2:
-        obstacle.addImage("2", obstImg2);
-        break;
-      case 3:
-        obstacle.addImage("3", obstImg3);
-        break;
-      case 4:
-        obstacle.addImage("4", obstImg4);
-        break;
-      case 5:
-        obstacle.addImage("5", obstImg5);
-        break;
-      case 6:
-        obstacle.addImage("6", obstImg6);
-        break;
-    }
+    var rand = Math.round(random(0, 5));
+    obstacle.addImage(obstImgs[rand]);
     obstacle.scale = 0.5;
     obstacle.lifetime = 250;
     obstacles.add(obstacle);
